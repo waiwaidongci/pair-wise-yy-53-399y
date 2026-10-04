@@ -9,9 +9,9 @@ export const initialWindows: LicenseWindow[] = [
 ]
 
 export const initialComments: RightsComment[] = [
-  { id: 'CM-31', channel: '星海影院', anchor: 'RW-101 · 院线独占尾部', author: '黎清', role: '法务', content: '流媒体开窗早于院线独占结束 15 天，违反窗口倒挂约束。请至少顺延至 2026-12-06。', resolved: false },
-  { id: 'CM-32', channel: '云帆视频', anchor: 'RW-102 · 地区范围', author: '章宁', role: '发行', content: '中国大陆独占与港澳台授权不冲突，但宣传物料的地区标识必须拆分为两个物料包。', resolved: false },
-  { id: 'CM-33', channel: '南华卫视', anchor: 'RW-103 · 次级授权', author: '黎清', role: '法务', content: '允许转授权，但须禁止向短视频平台分发超过 3 分钟的连续片段。', resolved: true },
+  { id: 'CM-31', channel: '星海影院', anchor: 'RW-101 · 院线独占尾部', anchorWindowId: 'RW-101', anchorVersion: 18, anchorSnapshot: { start: '2026-10-18', end: '2026-12-05', territory: '中国大陆', exclusive: true }, author: '黎清', role: '法务', content: '流媒体开窗早于院线独占结束 15 天，违反窗口倒挂约束。请至少顺延至 2026-12-06。', resolved: false },
+  { id: 'CM-32', channel: '云帆视频', anchor: 'RW-102 · 地区范围', anchorWindowId: 'RW-102', anchorVersion: 18, anchorSnapshot: { start: '2026-11-20', end: '2027-11-19', territory: '中国大陆', exclusive: true }, author: '章宁', role: '发行', content: '中国大陆独占与港澳台授权不冲突，但宣传物料的地区标识必须拆分为两个物料包。', resolved: false },
+  { id: 'CM-33', channel: '南华卫视', anchor: 'RW-103 · 次级授权', anchorWindowId: 'RW-103', anchorVersion: 18, anchorSnapshot: { start: '2027-01-08', end: '2027-03-31', territory: '中国大陆', exclusive: false }, author: '黎清', role: '法务', content: '允许转授权，但须禁止向短视频平台分发超过 3 分钟的连续片段。', resolved: true },
 ]
 
 export const versions: DraftVersion[] = [

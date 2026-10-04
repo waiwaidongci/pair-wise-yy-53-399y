@@ -1,8 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Flex, Grid, Heading, Text, Badge, Button, Input, Select, Checkbox, Table, Thead, Tbody, Tr, Th, Td, useToast, HStack } from '@chakra-ui/react'
-import { useRightsStore, useConflicts } from '@/store/rights'
+import { Box, Flex, Grid, Heading, Text, Badge, Button, Input, Select, Checkbox, Table, Thead, Tbody, Tr, Th, Td, useToast, HStack, Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react'
+import { useRightsStore, useConflicts, useFrozen } from '@/store/rights'
 import type { Territory } from '@/lib/types'
 
 const territories: (Territory | '全部地区')[] = ['全部地区', '中国大陆', '中国香港', '中国台湾', '新加坡', '马来西亚', '北美']
@@ -18,6 +18,7 @@ export default function WindowsPage() {
   const [shiftDays, setShiftDays] = useState(7)
   const toast = useToast()
   const conflicts = useConflicts()
+  const frozen = useFrozen()
   const filtered = useMemo(() => selectedTerritory === '全部地区' ? windows : windows.filter((item) => item.territory === selectedTerritory), [windows, selectedTerritory])
   const selected = windows.find((item) => item.id === selectedWindowId)
 
@@ -31,6 +32,15 @@ export default function WindowsPage() {
   return (
     <Box>
       <Flex justify="space-between" mb={5} gap={4} direction={{ base: 'column', md: 'row' }}><Box><Text color="brand.600" fontSize="xs" fontWeight="bold">TIME × TERRITORY</Text><Heading fontSize="3xl" my={1}>授权窗口与地区矩阵</Heading><Text color="gray.600">窗口和地区联动筛选，批量调整后即时重算独占、重叠与倒挂冲突。</Text></Box><Flex gap={2}><Select maxW="150px" value={selectedTerritory} onChange={(event) => useRightsStore.setState({ selectedTerritory: event.target.value })}>{territories.map((territory) => <option key={territory}>{territory}</option>)}</Select><Button colorScheme="blue" onClick={validateAndSave}>校验并保存</Button></Flex></Flex>
+      {frozen && (
+        <Alert status="info" mb={4} borderRadius="8px">
+          <AlertIcon />
+          <Box>
+            <AlertTitle>当前版本已冻结为只读快照</AlertTitle>
+            <AlertDescription>窗口数据已保留在审批快照中。在此修改任一窗口将生成新的草案版本，需重新审批。</AlertDescription>
+          </Box>
+        </Alert>
+      )}
       <Grid templateColumns={{ base: '1fr', xl: 'minmax(0,1.1fr) minmax(360px,.8fr)' }} gap={4}>
         <Box bg="white" border="1px solid" borderColor="gray.200" borderRadius="8px" overflow="hidden">
           <Flex p={4} justify="space-between" align="center"><Heading size="md">授权窗口清单</Heading><HStack><Select size="sm" w="110px" value={shiftDays} onChange={(event) => setShiftDays(Number(event.target.value))}><option value={7}>+7 天</option><option value={14}>+14 天</option><option value={-7}>-7 天</option><option value={-14}>-14 天</option></Select><Button size="sm" onClick={() => { if (!selectedIds.length) return toast({ title: '请选择窗口', status: 'warning' }); batchShift(selectedIds, shiftDays) }}>批量调窗</Button></HStack></Flex>

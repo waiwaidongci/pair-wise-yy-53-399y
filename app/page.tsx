@@ -2,7 +2,7 @@
 
 import { Box, Flex, Grid, Heading, Text, Badge, Button, Table, Thead, Tbody, Tr, Th, Td, Progress } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useRightsStore, useConflicts } from '@/store/rights'
+import { useRightsStore, useConflicts, useFrozen } from '@/store/rights'
 import { trpc } from '@/trpc/client'
 
 export default function Dashboard() {
@@ -10,12 +10,13 @@ export default function Dashboard() {
   const comments = useRightsStore((state) => state.comments)
   const version = useRightsStore((state) => state.version)
   const conflicts = useConflicts()
+  const frozen = useFrozen()
   const catalog = trpc.catalog.useQuery()
   const cards = [
     { label: '授权窗口', value: windows.length, note: `${catalog.data?.works.length ?? 2} 部作品` },
     { label: '责任地区', value: new Set(windows.map((item) => item.territory)).size, note: '联动地区矩阵' },
     { label: '高优先级冲突', value: conflicts.filter((item) => item.severity === '高').length, note: '阻止审批通过' },
-    { label: '当前草案', value: `v${version}`, note: '自动保留本地版本' },
+    { label: '当前草案', value: `v${version}`, note: frozen ? '已冻结为只读快照' : '自动保留本地版本' },
   ]
   return (
     <Box>
