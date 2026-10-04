@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 62053",
     "build": "next build",
-    "start": "next start -H 0.0.0.0 -p 62053"
+    "start": "next start -H 0.0.0.0 -p 62053",
+    "test:smoke": "tsc scripts/smoke.ts --outDir .smoke-build --module commonjs --moduleResolution node --target ES2020 --esModuleInterop --skipLibCheck && node .smoke-build/scripts/smoke.js; status=$?; rm -rf .smoke-build; exit $status"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.10.9",
